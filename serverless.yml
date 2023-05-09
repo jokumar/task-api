@@ -1,0 +1,66 @@
+service: task-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  environment:
+    USER_POOL_ID: !Ref CognitoUserPool
+    CLIENT_ID: !Ref CognitoUserPoolClient
+functions:
+  createTask:
+    handler: index.create
+    iamRoleStatementsName: PUTrole #optional custom role name setting instead of the default generated one
+    iamRoleStatements:
+      - Effect: "Allow"        
+        Action:
+          - dynamodb:PutItem        
+        Resource: !GetAtt TaskTable.Arn
+    events:
+        - http:
+            path: tasks
+            method: post  
+            authorizer: TaskLambdaAuthorizer
+  
+  
+
+  UpdateTask:
+    handler: index.update
+    events:
+        - http:
+            path: tasks
+            method: put  
+  DeleteTask:
+    handler: index.delete
+    events:
+        - http:
+            path: tasks
+            method: delete            
+  GetAllTask:
+    handler: index.get
+    iamRoleStatements:
+      - Effect: "Allow"        
+        Action:
+          - dynamodb:Scan*      
+        Resource: !GetAtt TaskTable.Arn
+    events:
+        - http:
+            path: tasks
+            method: get 
+            authorizer: 
+              name: TaskUserPool
+              type: COGNITO_USER_POOLS
+              arn: !GetAtt CognitoUserPool.Arn
+
+  TaskLambdaAuthorizer:
+    handler: iam.authorizer  
+
+
+plugins:
+  - serverless-iam-roles-per-function
+
+
+resources: 
+  Resources: 
+    ${file(cfresources.yml)}

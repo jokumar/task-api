@@ -1,0 +1,42 @@
+TaskTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: Task-${self:provider.stage}
+    AttributeDefinitions:
+      - AttributeName: taskName
+        AttributeType: S
+    KeySchema:
+      - AttributeName: taskName
+        KeyType: HASH
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+
+CognitoUserPool:
+  Type: AWS::Cognito::UserPool
+  Properties: 
+    UserPoolName: TaskUserPool-${self:provider.stage}
+    UsernameAttributes:   
+      - email
+CognitoUserPoolClient:
+  Type : AWS::Cognito::UserPoolClient    
+  Properties: 
+    AllowedOAuthFlowsUserPoolClient: true
+    ClientName: TaskUserPoolClient-${self:provider.stage}
+    UserPoolId: !Ref CognitoUserPool
+    CallbackURLs: 
+      - http://localhost:8080
+    AllowedOAuthFlows: 
+      - implicit
+    AllowedOAuthScopes:
+      - email
+      - openid
+    SupportedIdentityProviders:
+      - COGNITO
+
+
+CognitoUserDomain:
+  Type: AWS::Cognito::UserPoolDomain
+  Properties:  
+    UserPoolId: !Ref CognitoUserPool
+    Domain: cloudgentechnologytasks-${self:provider.stage}
