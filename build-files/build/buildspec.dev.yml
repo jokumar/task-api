@@ -4,7 +4,7 @@ phases:
     
     on-failure: ABORT 
     runtime-versions:
-      nodejs: 18
+      nodejs: 14
     commands:
       - echo installing serverless 
       - npm i -g serverless
