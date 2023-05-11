@@ -1,0 +1,33 @@
+version: 0.2
+phases:
+  install:
+    
+    on-failure: ABORT 
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo installing serverless 
+      - npm i -g serverless
+      - cd task-api
+      - echo installing jwt library 
+      - npm install aws-jwt-verify
+      - echo installing iam role per  function 
+      - npm install serverless-iam-roles-per-function
+
+  build:
+   
+    on-failure: ABORT 
+    commands:
+      - echo running test 
+      - npm test 
+      - echo packaging service 
+      - serverless package --package myartifact --stage dev
+    
+artifacts:
+  files:
+    - my-artifacts/*
+  name: MyProjectArtifacts
+  
+cache:
+  paths:
+    - 'task-api/node_modules/**/*'
