@@ -8,8 +8,8 @@ const {
 } = require("@aws-sdk/lib-dynamodb");
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
+const tableName= process.env.TABLE_NAME;
 
-const tableName = "Task";
 
 
 

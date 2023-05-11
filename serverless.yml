@@ -8,6 +8,7 @@ provider:
   environment:
     USER_POOL_ID: !Ref CognitoUserPool
     CLIENT_ID: !Ref CognitoUserPoolClient
+    TABLE_NAME: Task-${self:provider.stage}
 functions:
   createTask:
     handler: index.create
