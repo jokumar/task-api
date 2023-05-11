@@ -9,7 +9,6 @@ phases:
       - echo installing serverless 
       - npm i -g serverless
       - pwd
-      - cd task-api
       - echo installing jwt library 
       - npm install aws-jwt-verify
       - echo installing iam role per  function 
@@ -31,4 +30,4 @@ artifacts:
   
 cache:
   paths:
-    - 'task-api/node_modules/**/*'
+    - 'node_modules/**/*'
