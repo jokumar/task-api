@@ -8,6 +8,7 @@ phases:
     commands:
       - echo installing serverless 
       - npm i -g serverless
+      - pwd
       - cd task-api
       - echo installing jwt library 
       - npm install aws-jwt-verify
