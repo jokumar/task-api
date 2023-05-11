@@ -8,7 +8,6 @@ phases:
     commands:
       - echo installing serverless 
       - npm i -g serverless
-      - pwd
       - echo installing jwt library 
       - npm install aws-jwt-verify
       - echo installing iam role per  function 

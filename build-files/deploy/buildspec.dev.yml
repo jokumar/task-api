@@ -1,0 +1,26 @@
+version: 0.2
+phases:
+  install:
+    
+    on-failure: ABORT 
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo installing serverless 
+      - npm i -g serverless
+
+  build:
+   
+    on-failure: ABORT 
+    commands:
+      - echo deploying service 
+      - serverless deploy --stage dev
+    
+artifacts:
+  files:
+    - myartifact/*
+  name: MyProjectArtifacts
+  
+cache:
+  paths:
+    - 'node_modules/**/*'
